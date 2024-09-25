@@ -1,0 +1,39 @@
+version : '3.8'
+
+services:
+  app:
+    build: .
+    ports :
+      - "8000:80"
+    environment:
+      AWS_REGION : ${AWS_REGION}
+      USER_POOL_ID : ${USER_POOL_ID}
+      CLIENT_ID : ${CLIENT_ID}
+      AWS_ACCESS_KEY_ID : ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY : ${AWS_SECRET_ACCESS_KEY}
+      DYNAMO_DB_TABLE : ${DYNAMO_DB_TABLE}
+      TABLE_NAME_USER : userapp
+      TABLE_NAME_CONVERSATION : conversations
+      TABLE_NAME_CONVERSATION_MESSAGES : messages
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+      POSTGRES_SERVER: postgres
+      POSTGRES_PORT: 5432
+    depends_on:
+     - postgres
+
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
